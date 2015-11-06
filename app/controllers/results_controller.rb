@@ -51,18 +51,30 @@ class ResultsController < ApplicationController
     params["compare_with_latest_of_tag"]
   end
 
+  def old_result_for(new_result)
+    old_result = Result
+      .where(example_name: new_result.example_name)
+      .where.not(id: new_result.id)
+
+    if compare_with_latest_of_tag.present?
+      old_result = old_result.where(tag: compare_with_latest_of_tag)
+    end
+
+    old_result = old_result.last
+  end
+
+  def format_comparison(new_result, queries_that_got_added, queries_that_got_removed)
+    {
+      "example_name" => new_result.example_name,
+      "example_location" => new_result.example_location,
+      "queries_that_got_added" => queries_that_got_added,
+      "queries_that_got_removed" => queries_that_got_removed,
+    }
+  end
+
   def comparison(new_results)
     new_results.map do |new_result|
-      old_result = Result
-        .where(example_name: new_result.example_name)
-        .where.not(id: new_result.id)
-
-      if compare_with_latest_of_tag.present?
-        old_result = old_result.where(tag: compare_with_latest_of_tag)
-      end
-
-      old_result = old_result.last
-
+      old_result = old_result_for(new_result)
       next unless old_result.present?
 
       old_queries = old_result.queries.order(:id).map(&:statement)
@@ -73,12 +85,7 @@ class ResultsController < ApplicationController
 
       next if queries_that_got_added.empty? && queries_that_got_removed.empty?
 
-      {
-        "example_name" => new_result.example_name,
-        "example_location" => new_result.example_location,
-        "queries_that_got_added" => queries_that_got_added,
-        "queries_that_got_removed" => queries_that_got_removed,
-      }
+      format_comparison(new_result, queries_that_got_added, queries_that_got_removed)
     end.compact
   end
 end
