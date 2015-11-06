@@ -1,11 +1,15 @@
 class ResultsController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:create]
+
   def create
     render :ok, json: results
   end
 
+  private
+
   def results
-    result_set.map do |result|
-      queries = create_queries(result[:queries])
+    result_data.map do |result|
+      queries = create_queries(result['queries'])
       Result.create!(result.merge(queries: queries))
     end
   end
@@ -16,7 +20,7 @@ class ResultsController < ApplicationController
     end
   end
 
-  def result_set
-    params["result_set"]
+  def result_data
+    params["result_data"]
   end
 end
