@@ -52,15 +52,11 @@ class ResultsController < ApplicationController
   end
 
   def old_result_for(new_result)
-    old_result = Result
+    Result
+      .optionally_with_tag(compare_with_latest_of_tag)
       .where(example_name: new_result.example_name)
       .where.not(id: new_result.id)
-
-    if compare_with_latest_of_tag.present?
-      old_result = old_result.where(tag: compare_with_latest_of_tag)
-    end
-
-    old_result = old_result.last
+      .last
   end
 
   def format_comparison(new_result, queries_that_got_added, queries_that_got_removed)
