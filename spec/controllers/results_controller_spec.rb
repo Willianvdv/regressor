@@ -26,10 +26,10 @@ RSpec.describe ResultsController, :type => :controller do
     end
 
     subject { post :create, params: params }
-    
+
     it do
-      binding.pry
       expect(subject).to have_http_status :success
+      binding.pry
     end
   end
 end
