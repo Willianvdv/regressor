@@ -7,5 +7,9 @@ FactoryGirl.define do
     sequence(:example_name) do |n|
       "Users change reputation version #{n} uses the correct timestamp"
     end
+
+    sequence(:tag) do |n|
+      "https://github.com/Willianvdv/regressor/pull/#{n}"
+    end
   end
 end

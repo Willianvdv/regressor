@@ -26,6 +26,7 @@ class ResultsController < ApplicationController
       result = Result.create!(
         example_location: result_json['example_location'],
         example_name: result_json['example_name'],
+        tag: result_tag,
       )
       create_queries(result, result_json['queries'])
       result
@@ -40,6 +41,10 @@ class ResultsController < ApplicationController
 
   def result_data
     params["result_data"]
+  end
+
+  def result_tag
+    params["tag"]
   end
 
   def comparison(new_results)

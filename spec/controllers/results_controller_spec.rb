@@ -6,6 +6,7 @@ RSpec.describe ResultsController, :type => :controller do
   describe '.create' do
     let(:params) do
       {
+        "tag" => "pull-request-1",
         "result_data" => [
           {
             "example_location" => "spec/integration/users/user_spec.rb",
@@ -29,8 +30,14 @@ RSpec.describe ResultsController, :type => :controller do
 
     subject { post :create, params: params }
 
-    it do
+    it 'succeeds' do
       expect(subject).to have_http_status :success
+    end
+
+    it 'creates two results' do
+      expect { subject }.to change { Result.count }.by(2)
+
+      expect(Result.all.map(&:tag).uniq).to eq ['pull-request-1']
     end
 
     context 'with old queries' do
