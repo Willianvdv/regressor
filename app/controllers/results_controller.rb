@@ -47,12 +47,21 @@ class ResultsController < ApplicationController
     params["tag"]
   end
 
+  def compare_with_latest_of_tag
+    params["compare_with_latest_of_tag"]
+  end
+
   def comparison(new_results)
     new_results.map do |new_result|
       old_result = Result
         .where(example_name: new_result.example_name)
         .where.not(id: new_result.id)
-        .last
+
+      if compare_with_latest_of_tag.present?
+        old_result = old_result.where(tag: compare_with_latest_of_tag)
+      end
+
+      old_result = old_result.last
 
       next unless old_result.present?
 

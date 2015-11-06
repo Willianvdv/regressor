@@ -4,9 +4,12 @@ RSpec.describe ResultsController, :type => :controller do
   let(:body_json) { JSON.parse subject.body }
 
   describe '.create' do
+    let(:compare_with_latest_of_tag) { nil }
+
     let(:params) do
       {
         "tag" => "pull-request-1",
+        "compare_with_latest_of_tag" => compare_with_latest_of_tag,
         "result_data" => [
           {
             "example_location" => "spec/integration/users/user_spec.rb",
@@ -40,10 +43,19 @@ RSpec.describe ResultsController, :type => :controller do
       expect(Result.all.map(&:tag).uniq).to eq ['pull-request-1']
     end
 
-    context 'with old queries' do
-      it do
-        old_result = create :result, example_name: 'user change user version 7 uses the correct timestamp'
+    context 'providing compare_with_latest_of_tag' do
+      let(:compare_with_latest_of_tag) { 'pull-request-1' }
+
+      it 'only compares with the provided tag' do
+        old_result = create :result,
+          tag: 'pull-request-1',
+          example_name: 'user change user version 7 uses the correct timestamp'
         create :query, result: old_result, statement: 'select * from users'
+
+        old_result = create :result,
+          tag: 'pull-request-2',
+          example_name: 'user change user version 7 uses the correct timestamp'
+        create :query, result: old_result, statement: 'delete from users limit 1'
 
         expected_result = [{
           "example_name" => "user change user version 7 uses the correct timestamp",
@@ -55,10 +67,37 @@ RSpec.describe ResultsController, :type => :controller do
         expect(subject).to have_http_status :success
         expect(body_json).to eq "results" => expected_result
       end
+    end
+
+    context 'with old queries' do
+      it do
+        old_result_not_used_for_comparison = create :result,
+          tag: 'pull-request-1',
+          example_name: 'user change user version 7 uses the correct timestamp'
+        create :query, result: old_result_not_used_for_comparison, statement: 'insert into users'
+
+        old_result_used_for_comparison = create :result,
+          tag: 'pull-request-2',
+          example_name: 'user change user version 7 uses the correct timestamp'
+        create :query, result: old_result_used_for_comparison, statement: 'select * from users'
+        create :query, result: old_result_used_for_comparison, statement: 'delete * from users'
+
+        expected_result = [{
+          "example_name" => "user change user version 7 uses the correct timestamp",
+          "example_location" => "spec/integration/users/user_spec.rb",
+          "queries_that_got_added"=>["select * from teams where id in (?)"],
+          "queries_that_got_removed"=>["delete * from users"],
+        }]
+
+        expect(subject).to have_http_status :success
+        expect(body_json).to eq "results" => expected_result
+      end
 
       context 'where the same query is used multiple times' do
         xit 'mentions the query twice' do
-          old_result = create :result, example_name: 'user change user version 7 uses the correct timestamp'
+          old_result = create :result,
+            tag: 'pull-request-1',
+            example_name: 'user change user version 7 uses the correct timestamp'
           create :query, result: old_result, statement: 'select * from users'
           create :query, result: old_result, statement: 'select * from users'
 
