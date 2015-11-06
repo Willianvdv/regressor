@@ -76,12 +76,21 @@ class ResultsController < ApplicationController
       old_queries = old_result.queries.order(:id).map(&:statement)
       new_queries = new_result.queries.order(:id).map(&:statement)
 
-      queries_that_got_added = new_queries - old_queries
-      queries_that_got_removed = old_queries - new_queries
+      queries_that_got_added = array_diff(new_queries, old_queries)
+      queries_that_got_removed = array_diff(old_queries, new_queries)
 
       next if queries_that_got_added.empty? && queries_that_got_removed.empty?
 
       format_comparison(new_result, queries_that_got_added, queries_that_got_removed)
     end.compact
+  end
+
+  def array_diff(a, b)
+    dup_b = b.dup
+    a.reject do |item|
+      b_index = dup_b.index(item)
+      next false unless b_index
+      dup_b.delete_at b_index
+    end
   end
 end
