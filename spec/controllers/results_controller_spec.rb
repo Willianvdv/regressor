@@ -38,7 +38,15 @@ RSpec.describe ResultsController, :type => :controller do
         old_result = create :result, example_name: 'user change user version 7 uses the correct timestamp'
         create :query, result: old_result, statement: 'select * from users'
 
+        expected_result = [{
+          "example_name" => "user change user version 7 uses the correct timestamp",
+          "example_location" => "spec/integration/users/user_spec.rb",
+          "queries_that_got_added"=>["select * from teams where id in (?)"],
+          "queries_that_got_removed"=>[],
+        }]
+
         expect(subject).to have_http_status :success
+        expect(body_json).to eq "results" => expected_result
       end
     end
   end
@@ -51,16 +59,17 @@ RSpec.describe ResultsController, :type => :controller do
       create :query, result: result
       create :query, result: result
 
-      results = [{
-        "example_location" => result.example_location,
-        "example_name" => result.example_name,
-        "queries" => result.queries.map do |query|
-          { "statement" => query.statement }
-        end
-      }]
-
       expect(subject).to have_http_status :success
-      expect(body_json).to eq "results" => results
+      expect(body_json).to eq(
+        "Users change reputation version 1 uses the correct timestamp" => [
+          {
+            "statement"=>"SELECT users.* FROM users WHERE id = 1"
+          },
+          {
+            "statement"=>"SELECT users.* FROM users WHERE id = 2"
+          }
+        ]
+      )
     end
   end
 end

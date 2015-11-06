@@ -13,7 +13,7 @@ class ResultsController < ApplicationController
     Result.all.each do |result|
       queries = result_sets.fetch(result.example_name, [])
       queries += result.queries
-      result_sets[result.example_name] = queries
+      result_sets[result.example_name] = serialize(queries)
     end
 
     render :ok, json: result_sets
@@ -22,7 +22,7 @@ class ResultsController < ApplicationController
   private
 
   def create_new_result
-    result_set.map do |result_json|
+    result_data.map do |result_json|
       result = Result.create!(
         example_location: result_json['example_location'],
         example_name: result_json['example_name'],
