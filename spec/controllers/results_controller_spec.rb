@@ -1,21 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe ResultsController, :type => :controller do
+  let(:body_json) { JSON.parse subject.body }
+
   describe '.create' do
     let(:params) do
       {
         "result_set" => [
           {
-            "example_location" => "spec/integration/reputations/reputation_spec.rb",
-            "example_name" => "Reputation change reputation version 7 uses the correct timestamp",
+            "example_location" => "spec/integration/users/user_spec.rb",
+            "example_name" => "user change user version 7 uses the correct timestamp",
             "queries" => [
               'select * from users',
               'select * from teams where id in (?)'
             ],
           },
           {
-            "example_location" => "spec/integration/reputations/reputation_spec.rb",
-            "example_name" => "Reputation change reputation version 7 updates user create report rate limit privilege",
+            "example_location" => "spec/integration/users/user_spec.rb",
+            "example_name" => "user change user version 7 updates user create report rate limit privilege",
             "queries" => [
               'select * from teams where id in (?)',
               'select * from users'
@@ -30,14 +32,23 @@ RSpec.describe ResultsController, :type => :controller do
     it do
       expect(subject).to have_http_status :success
     end
+
+    context 'with old queries' do
+      it do
+        old_result = create :result, example_name: 'user change user version 7 uses the correct timestamp'
+        create :query, result: old_result, statement: 'select * from users'
+
+        expect(subject).to have_http_status :success
+      end
+    end
   end
 
   describe '.index' do
     subject { get :index }
-    let(:body_json) { JSON.parse subject.body }
 
     it do
       result = create :result
+      create :query, result: result
       create :query, result: result
 
       results = [{
