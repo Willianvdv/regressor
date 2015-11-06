@@ -48,6 +48,27 @@ RSpec.describe ResultsController, :type => :controller do
         expect(subject).to have_http_status :success
         expect(body_json).to eq "results" => expected_result
       end
+
+      context 'where the same query is used multiple times' do
+        xit 'mentions the query twice' do
+          old_result = create :result, example_name: 'user change user version 7 uses the correct timestamp'
+          create :query, result: old_result, statement: 'select * from users'
+          create :query, result: old_result, statement: 'select * from users'
+
+          expected_result = [{
+            "example_name" => "user change user version 7 uses the correct timestamp",
+            "example_location" => "spec/integration/users/user_spec.rb",
+            "queries_that_got_added"=>[
+              "select * from teams where id in (?)",
+              "select * from teams where id in (?)",
+            ],
+            "queries_that_got_removed"=>[],
+          }]
+
+          expect(subject).to have_http_status :success
+          expect(body_json).to eq "results" => expected_result
+        end
+      end
     end
   end
 
