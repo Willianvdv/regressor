@@ -3,16 +3,25 @@ class ResultsController < ApplicationController
     render :ok, json: results
   end
 
+  def index
+    render :ok, json: Result.all
+  end
+
+  private
+
   def results
-    result_set.map do |result|
-      queries = create_queries(result[:queries])
-      Result.create!(result.merge(queries: queries))
+    result_set.map do |result_json|
+      result = Result.create!(
+        example_location: result_json[:example_location],
+        example_name: result_json[:example_name],
+      )
+      create_queries(result, result_json[:queries])
     end
   end
 
-  def create_queries(result_queries)
+  def create_queries(result, result_queries)
     result_queries.each do |result_query|
-      Query.create!(statement: result_query)
+      result.queries.build(statement: result_query).save!
     end
   end
 

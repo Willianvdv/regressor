@@ -6,6 +6,7 @@ gem 'sprockets', github: "rails/sprockets"
 gem 'sass-rails', github: "rails/sass-rails"
 gem 'arel', github: "rails/arel"
 gem 'rack', github: "rack/rack"
+gem 'active_model_serializers', '~> 0.8.3'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
@@ -21,8 +22,6 @@ gem 'coffee-rails', github: "rails/coffee-rails"
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
 
 gem 'stronger_parameters', '~> 2.4.0'
 
@@ -50,6 +49,8 @@ end
 
 group :test do
   gem 'rspec-rails'
+  gem 'factory_girl_rails'
+  gem 'database_cleaner'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

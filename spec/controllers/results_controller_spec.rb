@@ -29,7 +29,27 @@ RSpec.describe ResultsController, :type => :controller do
 
     it do
       expect(subject).to have_http_status :success
-      binding.pry
+    end
+  end
+
+  describe '.index' do
+    subject { get :index }
+    let(:body_json) { JSON.parse subject.body }
+
+    it do
+      result = create :result
+      create :query, result: result
+
+      results = [{
+        "example_location" => result.example_location,
+        "example_name" => result.example_name,
+        "queries" => result.queries.map do |query|
+          { "statement" => query.statement }
+        end
+      }]
+
+      expect(subject).to have_http_status :success
+      expect(body_json).to eq "results" => results
     end
   end
 end
