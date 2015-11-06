@@ -6,7 +6,7 @@ RSpec.describe ResultsController, :type => :controller do
   describe '.create' do
     let(:params) do
       {
-        "result_set" => [
+        "result_data" => [
           {
             "example_location" => "spec/integration/users/user_spec.rb",
             "example_name" => "user change user version 7 uses the correct timestamp",

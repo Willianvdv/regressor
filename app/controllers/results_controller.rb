@@ -1,4 +1,6 @@
 class ResultsController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:create]
+
   def create
     new_result = create_new_result
 
@@ -22,10 +24,10 @@ class ResultsController < ApplicationController
   def create_new_result
     result_set.map do |result_json|
       result = Result.create!(
-        example_location: result_json[:example_location],
-        example_name: result_json[:example_name],
+        example_location: result_json['example_location'],
+        example_name: result_json['example_name'],
       )
-      create_queries(result, result_json[:queries])
+      create_queries(result, result_json['queries'])
       result
     end
   end
@@ -36,8 +38,8 @@ class ResultsController < ApplicationController
     end
   end
 
-  def result_set
-    params["result_set"]
+  def result_data
+    params["result_data"]
   end
 
   def comparison(new_results)

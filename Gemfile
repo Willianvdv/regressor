@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'rails', path: "/home/plague/work/h1/rails"
+gem 'rails', git: 'http://github.com/rails/rails.git'
+
 gem 'sprockets-rails', github: "rails/sprockets-rails"
 gem 'sprockets', github: "rails/sprockets"
 gem 'sass-rails', github: "rails/sass-rails"
