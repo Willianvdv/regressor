@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ResultsController, :type => :controller do
   let(:body_json) { JSON.parse subject.body }
+  let(:project) { create :project }
 
   describe '.create' do
     let(:compare_with_latest_of_tag) { nil }
@@ -31,7 +32,7 @@ RSpec.describe ResultsController, :type => :controller do
       }
     end
 
-    subject { post :create, params: params }
+    subject { post :create, params.merge(project_id: project.slug) }
 
     it 'succeeds' do
       expect(subject).to have_http_status :success
@@ -53,7 +54,7 @@ RSpec.describe ResultsController, :type => :controller do
         create :query, result: old_result, statement: 'select * from users'
 
         old_result = create :result,
-          tag: 'pull-request-2',
+          tag: 'ramspull-request-2',
           example_name: 'user change user version 7 uses the correct timestamp'
         create :query, result: old_result, statement: 'delete from users limit 1'
 
@@ -123,7 +124,7 @@ RSpec.describe ResultsController, :type => :controller do
   end
 
   describe '.index' do
-    subject { get :index }
+    subject { get :index, project_id: project.slug }
 
     it do
       result = create :result

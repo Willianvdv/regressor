@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  resources :projects
+  resources :projects do
+    resources :results, only: [:create, :index]
+  end
+
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   devise_scope :user do
     get 'sign_in', to: 'devise/sessions#new', as: :new_user_session
@@ -7,5 +10,4 @@ Rails.application.routes.draw do
   end
 
   root to: 'home#index'
-  resources :results, only: [:create, :index]
 end

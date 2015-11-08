@@ -2,9 +2,7 @@ class ResultsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create]
 
   def create
-    new_result = create_new_result
-
-    render :ok, json: comparison(new_result)
+    render :ok, json: comparison(create_new_result)
   end
 
   def index
