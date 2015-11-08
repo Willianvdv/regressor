@@ -1,12 +1,11 @@
 source 'https://rubygems.org'
 
-gem 'rails', git: 'http://github.com/rails/rails.git'
-
-gem 'sprockets-rails', github: "rails/sprockets-rails"
-gem 'sprockets', github: "rails/sprockets"
-gem 'sass-rails', github: "rails/sass-rails"
-gem 'arel', github: "rails/arel"
-gem 'rack', github: "rack/rack"
+gem 'rails'
+gem 'sprockets-rails'
+gem 'sprockets'
+gem 'sass-rails'
+gem 'arel'
+gem 'rack'
 gem 'active_model_serializers', '~> 0.8.3'
 
 # Use sqlite3 as the database for Active Record
@@ -47,6 +46,8 @@ group :development do
   gem 'web-console', github: 'rails/web-console'
   gem 'spring-commands-rspec'
   gem 'guard-rspec', require: false
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :test do
@@ -57,3 +58,6 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'omniauth'
+gem 'devise', github: 'plataformatec/devise'
+gem 'omniauth-github'
