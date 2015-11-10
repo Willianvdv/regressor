@@ -49,13 +49,16 @@ RSpec.describe ResultsController, :type => :controller do
 
       it 'only compares with the provided tag' do
         old_result = create :result,
+          project: project,
           tag: 'pull-request-1',
           example_name: 'user change user version 7 uses the correct timestamp'
         create :query, result: old_result, statement: 'select * from users'
 
         old_result = create :result,
+          project: project,
           tag: 'ramspull-request-2',
           example_name: 'user change user version 7 uses the correct timestamp'
+
         create :query, result: old_result, statement: 'delete from users limit 1'
 
         expected_result = [{
@@ -73,13 +76,16 @@ RSpec.describe ResultsController, :type => :controller do
     context 'with old queries' do
       it do
         old_result_not_used_for_comparison = create :result,
+          project: project,
           tag: 'pull-request-1',
           example_name: 'user change user version 7 uses the correct timestamp'
         create :query, result: old_result_not_used_for_comparison, statement: 'insert into users'
 
         old_result_used_for_comparison = create :result,
+          project: project,
           tag: 'pull-request-2',
           example_name: 'user change user version 7 uses the correct timestamp'
+
         create :query, result: old_result_used_for_comparison, statement: 'select * from users'
         create :query, result: old_result_used_for_comparison, statement: 'delete * from users'
 
@@ -97,6 +103,7 @@ RSpec.describe ResultsController, :type => :controller do
       context 'where the same query is used multiple times' do
         it 'mentions the query twice' do
           old_result = create :result,
+            project: project,
             tag: 'pull-request-1',
             example_name: 'user change user version 7 uses the correct timestamp'
 

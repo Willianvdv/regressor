@@ -1,5 +1,7 @@
 FactoryGirl.define do
   factory :result do
+    association :project
+
     sequence(:example_location) do |n|
       "spec/integration/users_v#{n}_spec.rb"
     end

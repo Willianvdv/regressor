@@ -25,11 +25,11 @@ class ResultsController < ApplicationController
 
   def create_new_result
     result_data.map do |result_json|
-      result = project.results.create!(
+      result = project.results.create! \
         example_location: result_json['example_location'],
         example_name: result_json['example_name'],
-        tag: result_tag,
-      )
+        tag: result_tag
+
       create_queries(result, result_json['queries'])
       result
     end
@@ -54,7 +54,8 @@ class ResultsController < ApplicationController
   end
 
   def old_result_for(new_result)
-    Result
+    project
+      .results
       .optionally_with_tag(compare_with_latest_of_tag)
       .where(example_name: new_result.example_name)
       .where.not(id: new_result.id)
