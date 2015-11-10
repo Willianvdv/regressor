@@ -32,7 +32,7 @@ RSpec.describe ResultsController, :type => :controller do
       }
     end
 
-    subject { post :create, params.merge(project_id: project.slug) }
+    subject { post :create, params.merge(project_id: project.id) }
 
     it 'succeeds' do
       expect(subject).to have_http_status :success
@@ -124,7 +124,7 @@ RSpec.describe ResultsController, :type => :controller do
   end
 
   describe '.index' do
-    subject { get :index, project_id: project.slug }
+    subject { get :index, project_id: project.id }
 
     it do
       result = create :result

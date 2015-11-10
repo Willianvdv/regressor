@@ -19,9 +19,13 @@ class ResultsController < ApplicationController
 
   private
 
+  def project
+    @project ||= Project.find params[:project_id]
+  end
+
   def create_new_result
     result_data.map do |result_json|
-      result = Result.create!(
+      result = project.results.create!(
         example_location: result_json['example_location'],
         example_name: result_json['example_name'],
         tag: result_tag,

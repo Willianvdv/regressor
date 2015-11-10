@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
-  resources :projects do
-    resources :results, only: [:create, :index]
-  end
+  resources :projects
+  resources :results, only: [:create, :index]
 
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   devise_scope :user do
