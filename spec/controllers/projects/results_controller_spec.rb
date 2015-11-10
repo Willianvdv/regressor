@@ -128,12 +128,18 @@ RSpec.describe ResultsController, :type => :controller do
         end
       end
     end
+
+    describe 'without project no access' do
+      it do
+        expect { post(:create, params) }.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
   end
 
   describe '.index' do
     subject { get :index, project_id: project.id }
 
-    it do
+    xit do
       result = create :result
       create :query, result: result
       create :query, result: result

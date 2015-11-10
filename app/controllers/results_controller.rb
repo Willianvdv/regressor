@@ -5,17 +5,17 @@ class ResultsController < ApplicationController
     render :ok, json: comparison(create_new_result)
   end
 
-  def index
-    result_sets = Hash.new
-
-    Result.all.each do |result|
-      queries = result_sets.fetch(result.example_name, [])
-      queries += result.queries
-      result_sets[result.example_name] = serialize(queries)
-    end
-
-    render :ok, json: result_sets
-  end
+  # def index
+  #   result_sets = Hash.new
+  #
+  #   Result.all.each do |result|
+  #     queries = result_sets.fetch(result.example_name, [])
+  #     queries += result.queries
+  #     result_sets[result.example_name] = serialize(queries)
+  #   end
+  #
+  #   render :ok, json: result_sets
+  # end
 
   private
 
@@ -24,17 +24,18 @@ class ResultsController < ApplicationController
   end
 
   def results
-    project.results.reorder created_at: :desc
+    project.results.reorder created_at: :asc
   end
 
   def create_new_result
     result_data.map do |result_json|
       result = results.create! \
-        example_location: result_json['example_location'],
+        tag: result_tag,
         example_name: result_json['example_name'],
-        tag: result_tag
+        example_location: result_json['example_location']
 
-      create_queries(result, result_json['queries'])
+      create_queries result, result_json['queries']
+
       result
     end
   end
@@ -58,8 +59,7 @@ class ResultsController < ApplicationController
   end
 
   def old_result_for(new_result)
-    project
-      .results
+    results
       .optionally_with_tag(compare_with_latest_of_tag)
       .where(example_name: new_result.example_name)
       .where.not(id: new_result.id)
