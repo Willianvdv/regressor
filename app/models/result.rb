@@ -3,10 +3,6 @@ class Result < ActiveRecord::Base
   belongs_to :project
 
   scope :optionally_with_tag, ->(tag) do
-    if tag.present?
-      where(tag: tag)
-    else
-      all
-    end
+    tag.present? ?  where(tag: tag) : all
   end
 end

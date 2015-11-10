@@ -13,6 +13,10 @@
 
 ActiveRecord::Schema.define(version: 20151110160748) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
+
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
     t.integer  "sluggable_id",              null: false
@@ -21,43 +25,43 @@ ActiveRecord::Schema.define(version: 20151110160748) do
     t.datetime "created_at"
   end
 
-  add_index "friendly_id_slugs", ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
-  add_index "friendly_id_slugs", ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
-  add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id"
-  add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
+  add_index "friendly_id_slugs", ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true, using: :btree
+  add_index "friendly_id_slugs", ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", using: :btree
+  add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
+  add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
-  create_table "projects", force: :cascade do |t|
-    t.integer  "user_id"
+  create_table "projects", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.uuid     "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "name"
     t.string   "slug"
   end
 
-  add_index "projects", ["slug"], name: "index_projects_on_slug", unique: true
-  add_index "projects", ["user_id"], name: "index_projects_on_user_id"
+  add_index "projects", ["slug"], name: "index_projects_on_slug", unique: true, using: :btree
+  add_index "projects", ["user_id"], name: "index_projects_on_user_id", using: :btree
 
-  create_table "queries", force: :cascade do |t|
-    t.integer  "result_id"
+  create_table "queries", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.uuid     "result_id"
     t.string   "statement"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  add_index "queries", ["result_id"], name: "index_queries_on_result_id"
+  add_index "queries", ["result_id"], name: "index_queries_on_result_id", using: :btree
 
-  create_table "results", force: :cascade do |t|
+  create_table "results", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "example_location"
     t.string   "example_name"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "tag"
-    t.integer  "project_id"
+    t.uuid     "project_id"
   end
 
-  add_index "results", ["project_id"], name: "index_results_on_project_id"
+  add_index "results", ["project_id"], name: "index_results_on_project_id", using: :btree
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
@@ -75,9 +79,12 @@ ActiveRecord::Schema.define(version: 20151110160748) do
     t.string   "api_key"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["provider"], name: "index_users_on_provider"
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-  add_index "users", ["uid"], name: "index_users_on_uid"
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["provider"], name: "index_users_on_provider", using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["uid"], name: "index_users_on_uid", using: :btree
 
+  add_foreign_key "projects", "users"
+  add_foreign_key "queries", "results"
+  add_foreign_key "results", "projects"
 end

@@ -23,9 +23,13 @@ class ResultsController < ApplicationController
     @project ||= Project.find params[:project_id]
   end
 
+  def results
+    project.results.reorder created_at: :desc
+  end
+
   def create_new_result
     result_data.map do |result_json|
-      result = project.results.create! \
+      result = results.create! \
         example_location: result_json['example_location'],
         example_name: result_json['example_name'],
         tag: result_tag

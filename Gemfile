@@ -8,8 +8,6 @@ gem 'arel'
 gem 'rack'
 gem 'active_model_serializers', '~> 0.8.3'
 
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
@@ -62,3 +60,4 @@ gem 'omniauth'
 gem 'devise', github: 'plataformatec/devise'
 gem 'omniauth-github'
 gem 'friendly_id'
+gem 'pg'
