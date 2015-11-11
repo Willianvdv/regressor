@@ -62,3 +62,4 @@ gem 'omniauth-github'
 gem 'friendly_id'
 gem 'pg'
 gem 'figaro'
+gem 'rails_12factor', group: :production
