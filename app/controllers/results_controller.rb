@@ -34,7 +34,7 @@ class ResultsController < ApplicationController
         example_name: result_json['example_name'],
         example_location: result_json['example_location']
 
-      create_queries result, result_json['queries']
+      create_queries(result, result_json['queries']) if result_json['queries']
 
       result
     end

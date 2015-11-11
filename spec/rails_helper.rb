@@ -49,4 +49,21 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.include Devise::TestHelpers, type: :controller
+
+  config.before :suite do
+    ActiveRecord::Base.descendants.last.first
+  end
+
+  config.before :each do |example|
+    RspecRegression::QueryRegressor.start_example example
+  end
+
+  config.after :each do |example|
+    RspecRegression::QueryRegressor.end_example
+  end
+
+  config.after :suite do
+    # This uploads the results to the regressor
+    RspecRegression::QueryRegressor.store_and_analyse
+  end
 end

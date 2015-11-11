@@ -44,6 +44,11 @@ RSpec.describe ResultsController, :type => :controller do
       expect(Result.all.map(&:tag).uniq).to eq ['pull-request-1']
     end
 
+    it 'create a result even no queries are given' do
+      params['result_data'].first.delete 'queries'
+      expect { subject }.to change { Result.count }.by(2)
+    end
+
     context 'providing compare_with_latest_of_tag' do
       let(:compare_with_latest_of_tag) { 'pull-request-1' }
 

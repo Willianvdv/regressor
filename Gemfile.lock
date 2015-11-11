@@ -28,6 +28,15 @@ GIT
       railties (>= 4.0)
       sprockets-rails (>= 2.0, < 4.0)
 
+GIT
+  remote: git://github.com/willianvdv/rspec_regression.git
+  revision: 397b65558a510e485e334b8dc8e4d464257df527
+  specs:
+    rspec_regression (0.0.1)
+      awesome_print
+      hirb
+      httparty
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -69,6 +78,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.3)
+    awesome_print (1.6.1)
     bcrypt (3.1.10)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
@@ -117,6 +127,10 @@ GEM
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
     hashie (3.4.3)
+    hirb (0.7.3)
+    httparty (0.13.7)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
     i18n (0.7.0)
     interception (0.5)
     jquery-rails (4.0.5)
@@ -293,6 +307,7 @@ DEPENDENCIES
   rails
   rails_12factor
   rspec-rails
+  rspec_regression!
   sass-rails
   spring-commands-rspec
   sprockets

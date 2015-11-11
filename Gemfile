@@ -52,6 +52,7 @@ group :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
+  gem 'rspec_regression', github: 'willianvdv/rspec_regression'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
