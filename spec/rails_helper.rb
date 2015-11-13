@@ -64,6 +64,6 @@ RSpec.configure do |config|
 
   config.after :suite do
     # This uploads the results to the regressor
-    RspecRegression::QueryRegressor.store_and_analyse
+    RspecRegression::QueryRegressor.store
   end
 end
