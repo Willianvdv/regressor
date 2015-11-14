@@ -2,7 +2,7 @@ class ResultsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create]
 
   def create
-    render :ok, json: comparison(create_new_result)
+    render :ok, json: create_results
   end
 
   # def index
@@ -27,7 +27,7 @@ class ResultsController < ApplicationController
     project.results.reorder created_at: :asc
   end
 
-  def create_new_result
+  def create_results
     result_data.map do |result_json|
       result = results.create! \
         tag: result_tag,
