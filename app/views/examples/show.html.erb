@@ -1,0 +1,21 @@
+<h1>Example: <%= @example.example_name %></h1>
+<div>
+  <dl>
+    <dt>Last seen at</dt>
+    <dd><%= @example.example_location %></dd>
+    <dt>Last ran at</dt>
+    <dd><%= @last_result_for_this_example.created_at %></dd>
+  </dl>
+<div>
+
+
+<div>
+  <table>
+    <% @results_for_this_example.each do |result| %>
+      <tr>
+        <td><%= result.created_at %></td>
+        <td><%= result.queries_count %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
