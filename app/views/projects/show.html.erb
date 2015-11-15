@@ -1,12 +1,20 @@
 <h1>Project <%= @project.name %></h1>
 <div>
-  <h2>Regressor settings</h2>
+  <h2>Results settings</h2>
   <dl>
     <dt>API key</dt>
     <dd>x</dd>
     <dt>Project id</dt>
     <dd><%= @project.id %></dd>
   </dl>
+</div>
+<div>
+  <h2>Examples</h2>
+  <ul>
+    <% @example_names.each do |example_name| %>
+      <li><%= example_name.humanize %></li>
+    <% end %>
+  </ul>
 </div>
 
 

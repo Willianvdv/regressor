@@ -1,4 +1,6 @@
 class ProjectsController < ApplicationController
+  before_action :authenticate_user!
+
   def new
     @project = current_user.projects.build
   end
@@ -19,6 +21,7 @@ class ProjectsController < ApplicationController
 
   def show
     @project = current_user.projects.find params['id']
+    @example_names = @project.example_names
   end
 
   private

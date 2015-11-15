@@ -66,4 +66,6 @@ RSpec.configure do |config|
     # This uploads the results to the regressor
     RspecRegression::QueryRegressor.store
   end
+
+  config.include Devise::TestHelpers, :type => :controller
 end
