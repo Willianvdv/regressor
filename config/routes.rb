@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resources :projects
+  resources :projects do
+    resources :examples
+  end
 
   resources :results, only: :create
 

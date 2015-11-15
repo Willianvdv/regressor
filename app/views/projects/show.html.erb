@@ -12,7 +12,7 @@
   <h2>Examples</h2>
   <ul>
     <% @example_names.each do |example_name| %>
-      <li><%= example_name.humanize %></li>
+      <li><%= link_to example_name, project_example_path(@project, example_name) %></li>
     <% end %>
   </ul>
 </div>

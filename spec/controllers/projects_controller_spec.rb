@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ProjectsController, type: :controller do
+describe ProjectsController, type: :controller do
   let(:project) { create :project }
 
   before { sign_in :user, project.user }
