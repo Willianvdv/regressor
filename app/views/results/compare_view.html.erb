@@ -1,0 +1,3 @@
+<h1>Comparison from <%= link_to(@result_left.id, "/results?id=#{@result_left.id}") %> to <%= link_to(@result_right.id, "/results?id=#{@result_right.id}") %></h1>
+
+<%= @results_comparer.diffy.html_safe %>

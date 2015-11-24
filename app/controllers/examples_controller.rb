@@ -1,8 +1,32 @@
 class ExamplesController < ApplicationController
   before_action :authenticate_user!
 
+  class ResultsViewer
+    attr_reader :results
+
+    def initialize(results)
+      @results = results
+    end
+
+    def each_with_maybe_previous
+      previous = nil
+      results.each do |current|
+        if previous
+          query_change = previous.queries_count - current.queries_count
+        else
+          query_change = 0
+        end
+
+        yield(previous, current, query_change)
+        previous = current
+      end
+    end
+  end
+
   def show
     @example = example
+    @results_viewer = ResultsViewer.new(results_for_this_example)
+
     @last_result_for_this_example = last_result_for_this_example
     @results_for_this_example = results_for_this_example
   end
@@ -20,7 +44,7 @@ class ExamplesController < ApplicationController
   end
 
   def last_result_for_this_example
-    @last_result_for_this_example ||= results_for_this_example.last
+    @last_result_for_this_example ||= results_for_this_example.first
   end
 
   def project_id
@@ -30,7 +54,7 @@ class ExamplesController < ApplicationController
   delegate :results, to: :project
 
   def results_for_this_example
-    results.where example_name: example_name
+    results.where(example_name: example_name).order(created_at: :desc)
   end
 
   def project

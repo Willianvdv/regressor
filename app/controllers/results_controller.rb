@@ -1,8 +1,109 @@
 class ResultsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create]
 
+  class ResultsComparer
+    attr_reader :left
+    attr_reader :right
+
+    def initialize(left, right)
+      @left = left
+      @right = right
+    end
+
+    def sdiff
+      file_path_left = write_to_file(left)
+      file_path_right = write_to_file(right)
+      `sdiff #{file_path_left} #{file_path_right}`
+    end
+
+    def differ
+      x = Differ.diff(
+        left.queries.map(&:statement).join("\n"),
+        right.queries.map(&:statement).join("\n"),
+      ).format_as(MyHtmlFormatter)
+      "<ul>#{x}</ul>"
+    end
+
+    def diffy
+      Diffy::Diff.new(
+        left.queries.map(&:statement).join("\n"),
+        right.queries.map(&:statement).join("\n"),
+      ).to_s(:html)
+    end
+
+    private
+
+    module MyHtmlFormatter
+      class << self
+        def format(change)
+          (change.change? && as_change(change)) ||
+            (change.delete? && as_delete(change)) ||
+            (change.insert? && as_insert(change)) ||
+            as_same(change)
+        end
+
+        private
+        def as_insert(change)
+          <<-HTML
+            <li class="red">Added: #{change.insert}</li>
+          HTML
+
+          #InsertChange.new(change.insert).to_s
+          #%Q{<ins class="differ">#{change.insert}</ins>}
+        end
+
+        def as_delete(change)
+          <<-HTML
+            <li class="green">Removed: #{change.delete}</li>
+          HTML
+          #
+          #DeleteChange.new(change).to_s
+          #%Q{<del class="differ">#{change.delete}</del></br>}
+        end
+
+        def as_change(change)
+          <<-HTML
+            <li>Changed: #{change.insert}</li>
+          HTML
+          #ChangeChange.new(change).to_s
+
+          #%Q{#{as_delete(change) << as_insert(change)}</br>}
+        end
+
+        def as_same(change)
+          <<-HTML
+            <li>Same: #{change.insert}</li>
+          HTML
+          #SameChange.new(change).to_s
+        end
+      end
+    end
+
+    def write_to_file(result)
+      file_path = "/tmp/#{result.id}"
+
+      File.open(file_path, 'w') do |f|
+        queries = result.queries
+
+        f.puts(queries.map(&:statement))
+      end
+
+      file_path
+    end
+  end
+
   def create
     render :ok, json: create_results
+  end
+
+  def index
+    @results = Result.where(id: params[:id])
+  end
+
+  def compare_view
+    @result_left = Result.find(params[:result_id_left])
+    @result_right = Result.find(params[:result_id_right])
+    @results_comparer = ResultsComparer.new(@result_left, @result_right)
   end
 
   # def index

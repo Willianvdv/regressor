@@ -1,0 +1,14 @@
+<h1>Results</h1>
+
+<div>
+  <% @results.each do |result| %>
+    <h2><%= result.example_name %></h2>
+
+    Queries:
+    <ul>
+      <% result.queries.each do |query| %>
+        <li><%= query.statement %></li>
+      <% end %>
+  </ul>
+  <% end %>
+</div>
