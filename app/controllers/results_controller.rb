@@ -1,5 +1,6 @@
 class ResultsController < BackendController
   skip_before_action :verify_authenticity_token, only: [:create]
+  skip_before_action :authenticate_user!, only: [:create]  # TODO: check for API token
 
   def create
     render :ok, json: create_results
