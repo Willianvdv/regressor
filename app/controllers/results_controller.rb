@@ -1,4 +1,4 @@
-class ResultsController < ApplicationController
+class ResultsController < BackendController
   skip_before_action :verify_authenticity_token, only: [:create]
 
   def create
@@ -6,13 +6,13 @@ class ResultsController < ApplicationController
   end
 
   def index
-    @results = Result.where(id: params[:id])
+    @results = current_user.results.where(id: params[:id])
   end
 
   def compare_view
-    @result_left = Result.find(params[:result_id_left])
-    @result_right = Result.find(params[:result_id_right])
-    @results_comper = ResultsComper.new(@result_left, @result_right)
+    result_left = Result.find(params[:result_id_left])
+    result_right = Result.find(params[:result_id_right])
+    @results_comper = ResultsComper.new(result_left, result_right)
   end
 
   # def index

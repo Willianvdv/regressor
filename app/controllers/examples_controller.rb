@@ -32,7 +32,9 @@ class ExamplesController < ApplicationController
   delegate :results, to: :project
 
   def results_for_this_example
-    results.where(example_name: example_name).order(created_at: :desc)
+    @results_for_this_example ||= results
+      .where(example_name: example_name)
+      .order(created_at: :desc)
   end
 
   def project

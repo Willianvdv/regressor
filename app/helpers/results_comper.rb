@@ -9,8 +9,15 @@ class ResultsComper
 
   def diffy
     Diffy::Diff.new(
-      left.queries.map(&:statement).join("\n"),
-      right.queries.map(&:statement).join("\n"),
+      result_to_statements(left),
+      result_to_statements(right),
     ).to_s(:html)
+  end
+
+  private
+
+  def result_to_statements(result)
+    queries = result.queries.map(&:statement).join("\n")
+    CGI::escapeHTML(queries)
   end
 end

@@ -1,6 +1,4 @@
-class ProjectsController < ApplicationController
-  before_action :authenticate_user!
-
+class ProjectsController < BackendController
   def new
     @project = current_user.projects.build
   end
