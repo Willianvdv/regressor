@@ -19,8 +19,7 @@ gem 'coffee-rails', github: "rails/coffee-rails"
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
-
+gem 'turbolinks' 
 gem 'stronger_parameters', '~> 2.4.0'
 
 # Use ActiveModel has_secure_password
@@ -64,3 +63,5 @@ gem 'friendly_id'
 gem 'pg'
 gem 'figaro'
 gem 'rails_12factor', group: :production
+
+gem 'diffy'

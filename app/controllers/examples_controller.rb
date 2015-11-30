@@ -3,6 +3,8 @@ class ExamplesController < ApplicationController
 
   def show
     @example = example
+    @results_viewer = ResultsViewer.new(results_for_this_example)
+
     @last_result_for_this_example = last_result_for_this_example
     @results_for_this_example = results_for_this_example
   end
@@ -20,7 +22,7 @@ class ExamplesController < ApplicationController
   end
 
   def last_result_for_this_example
-    @last_result_for_this_example ||= results_for_this_example.last
+    @last_result_for_this_example ||= results_for_this_example.first
   end
 
   def project_id
@@ -30,7 +32,9 @@ class ExamplesController < ApplicationController
   delegate :results, to: :project
 
   def results_for_this_example
-    results.where example_name: example_name
+    @results_for_this_example ||= results
+      .where(example_name: example_name)
+      .order(created_at: :desc)
   end
 
   def project

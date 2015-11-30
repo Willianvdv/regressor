@@ -3,7 +3,8 @@ Rails.application.routes.draw do
     resources :examples
   end
 
-  resources :results, only: :create
+  resources :results, only: [:create, :index]
+  get '/results/compare', to: 'results#compare_view', as: 'result_compare'
 
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   devise_scope :user do

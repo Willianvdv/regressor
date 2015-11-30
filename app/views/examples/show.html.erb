@@ -11,10 +11,27 @@
 
 <div>
   <table>
-    <% @results_for_this_example.each do |result| %>
+
+    <% @results_viewer.each_with_maybe_previous do |previous_result, result, query_change| %>
       <tr>
         <td><%= result.created_at %></td>
         <td><%= result.queries_count %></td>
+
+        <% if previous_result.present? %>
+          <% if query_change < 0 %>
+            <td class='green'>change: <%= query_change %></td>
+          <% elsif query_change == 0%>
+            <td>change: &nbsp;0</td>
+          <% else %>
+            <td class='red'>change: +<%= query_change %></td>
+          <% end %>
+          <td><%= link_to('Comparison', "/results/compare?result_id_left=#{result.id}&result_id_right=#{previous_result.id}") %></td>
+        <% else %>
+          <td></td>
+          <td></td>
+        <% end %>
+
+        <td><%= link_to('View', "/results?id=#{result.id}") %></td>
       </tr>
     <% end %>
   </table>
