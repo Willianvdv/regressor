@@ -11,7 +11,9 @@
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
 
-    <%= link_to 'Sign in', user_omniauth_authorize_path(:github) %>
+    <% if current_user.blank? %>
+      <%= link_to 'Sign in', user_omniauth_authorize_path(:github) %>
+    <% end %>
 
     <% if current_user.present? %>
       <%= link_to 'Sign out', destroy_user_session_path %>
