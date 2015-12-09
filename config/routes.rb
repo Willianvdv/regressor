@@ -3,7 +3,8 @@ Rails.application.routes.draw do
     resources :examples
   end
 
-  resources :results, only: [:create, :index]
+  resources :results, only: :index
+  resources :results, module: 'api', only: :create
 
   get '/results/compare', to: 'results#compare_view', as: 'result_compare'
 
