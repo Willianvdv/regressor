@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   end
 
   resources :results, only: [:create, :index]
+
   get '/results/compare', to: 'results#compare_view', as: 'result_compare'
+
+  get '/token', to: 'token#show', as: 'token_show'
+  post '/token', to: 'token#create', as: 'token_create'
 
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   devise_scope :user do

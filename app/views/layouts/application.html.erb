@@ -18,6 +18,7 @@
     <% if current_user.present? %>
       <%= link_to 'Sign out', destroy_user_session_path %>
       <%= link_to "My projects", projects_path %>
+      <%= link_to "My API token", token_show_path %>
     <% end %>
 
 

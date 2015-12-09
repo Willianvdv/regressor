@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  API_TOKEN_LENGTH = 64
+
   devise :omniauthable, omniauth_providers: [:github]
 
   has_many :projects

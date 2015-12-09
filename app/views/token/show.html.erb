@@ -1,0 +1,13 @@
+<p>
+Your API token is: <input type="text" readonly="readonly" value="<%= Base64.encode64(current_user.api_token) %>" size="<%= User::API_TOKEN_LENGTH * 1.5 %>"></input>
+<p>
+
+<p>
+You can use HTTP token authentication to authenticate yourself. The regressor-rspec gem does the heavy lifting for you, read the documentation.
+</p>
+<p>
+This token gives complete access to all the projects that you own.
+</p>
+
+<%= link_to "Generate new API token", token_create_path, method: :post %>
+(Careful! You cannot undo this operation.)
