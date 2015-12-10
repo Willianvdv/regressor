@@ -2,10 +2,6 @@ class ResultsController < BackendController
   skip_before_action :verify_authenticity_token, only: [:create]
   skip_before_action :authenticate_user!, only: [:create]  # TODO: check for API token
 
-  def create
-    render :ok, json: create_results
-  end
-
   def index
     @results = current_user.results.where(id: params[:id])
   end
@@ -29,41 +25,6 @@ class ResultsController < BackendController
   # end
 
   private
-
-  def project
-    @project ||= Project.find params[:project_id]
-  end
-
-  def results
-    project.results.reorder created_at: :asc
-  end
-
-  def create_results
-    result_data.map do |result_json|
-      result = results.create! \
-        tag: result_tag,
-        example_name: result_json['example_name'],
-        example_location: result_json['example_location']
-
-      create_queries(result, result_json['queries']) if result_json['queries']
-
-      result
-    end
-  end
-
-  def create_queries(result, result_queries)
-    result_queries.each do |result_query|
-      result.queries.build(statement: result_query).save!
-    end
-  end
-
-  def result_data
-    params["result_data"]
-  end
-
-  def result_tag
-    params["tag"]
-  end
 
   def compare_with_latest_of_tag
     params["compare_with_latest_of_tag"]
