@@ -5,7 +5,9 @@ module Api
     end
 
     def compare_latest_of_tags
-      comper = Api::ResultsComper.new project, params[:left_tag], params[:right_tag]
+      comper = Api::ResultsComper.new project,
+        params['left_tag'],
+        params['right_tag']
 
       respond_to do |format|
         format.json { render :ok, json: comper.comparison }
@@ -35,7 +37,7 @@ module Api
     end
 
     def project
-      @project ||= current_user.projects.find params[:project_id]
+      @project ||= current_user.projects.find params['project_id']
     end
 
     def results
