@@ -36,6 +36,8 @@ RSpec.describe Api::ResultsController, :type => :controller do
     include_examples 'authenticated using api token'
 
     context 'authorized', :auth_using_api_token do
+      let(:project) { create :project, user: user_with_api_token }
+
       it 'creates the results' do
         expect { subject }.to change { project.results.count }.by(2)
         result = project.results.first
@@ -57,6 +59,7 @@ RSpec.describe Api::ResultsController, :type => :controller do
     let(:tag_left) { '123-left' }
     let(:tag_right) { 'master-right' }
     let(:project) { create :project }
+    let(:shared_example_location) { 'spec/shared/example/location.rb' }
     let(:shared_example_name) { 'shared example name' }
     let(:format) { :json }
 
@@ -78,11 +81,13 @@ RSpec.describe Api::ResultsController, :type => :controller do
           result_left = create :result,
             tag: tag_left,
             example_name: shared_example_name,
+            example_location: shared_example_location,
             project: project
 
           result_right = create :result,
             tag: tag_right,
             example_name: shared_example_name,
+            example_location: shared_example_location,
             project: project
 
           create :query, result: result_left, statement: 'query in both'
@@ -93,7 +98,7 @@ RSpec.describe Api::ResultsController, :type => :controller do
 
           expect(response_json).to eq 'results' => [{
             'example_name' => 'shared example name',
-            'example_location' => 'spec/integration/users_v1_spec.rb',
+            'example_location' => 'spec/shared/example/location.rb',
             'queries_that_got_added' => ['new query'],
             'queries_that_got_removed' => ['removed query']
           }]

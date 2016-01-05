@@ -35,7 +35,7 @@ module Api
     end
 
     def project
-      @project ||= current_user.projects.find_by id: params[:project_id]
+      @project ||= current_user.projects.find params[:project_id]
     end
 
     def results
