@@ -1,8 +1,11 @@
 <div>
+  <p>
+    <%= link_to 'Create new project', new_project_path %>
+  </p>
+
   <ul>
     <% @projects.each do |project| %>
       <li><%= link_to project.id, project %></li>
     <% end %>
   </ul>
 </div>
-
