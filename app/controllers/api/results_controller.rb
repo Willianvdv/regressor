@@ -7,7 +7,10 @@ module Api
     def compare_latest_of_tags
       comper = Api::ResultsComper.new project, params[:left_tag], params[:right_tag]
 
-      render :ok, json: comper.comparison
+      respond_to do |format|
+        format.json { render :ok, json: comper.comparison }
+        format.text { render :ok, text: comper.comparison_in_markdown }
+      end
     end
 
     private

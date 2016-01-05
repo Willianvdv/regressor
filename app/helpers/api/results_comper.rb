@@ -25,7 +25,34 @@ module Api
       end.compact
     end
 
+    def comparison_in_markdown
+      <<-ENDMARKDOWN
+      Results:
+
+      #{comparison.map { |result| result_to_markdown result }.join("\n")}
+      ENDMARKDOWN
+    end
+
     private
+
+    def result_to_markdown(result)
+      header = "* #{result['example_name']} (#{result['example_location']})"
+
+      markdown = <<-ENDMARKDOWN
+        * Queries that got added:
+          #{array_to_markdown_list(result['queries_that_got_added'])}
+        * Queries that got removed:
+          #{array_to_markdown_list(result['queries_that_got_removed'])}
+      ENDMARKDOWN
+
+      header + "\n" + markdown.indent(2)
+    end
+
+    def array_to_markdown_list(arr)
+      arr.map do |elem|
+        "* #{elem}"
+      end.join("\n")
+    end
 
     def results_left
       project.results.where tag: left_tag
