@@ -4,10 +4,9 @@ Rails.application.routes.draw do
   end
 
   resources :results, only: :index
-  resources :results, module: 'api', only: :create
+  resources :results, module: 'api', only: [:create, :index]
 
   get '/results/compare', to: 'results#compare_view', as: 'result_compare'
-  get '/api/results/compare_latest_of_tags', module: 'api', to: 'results#compare_latest_of_tags', as: 'api_results_compare_latest_of_tags'
 
   get '/token', to: 'token#show', as: 'token_show'
   post '/token', to: 'token#create', as: 'token_create'

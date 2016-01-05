@@ -4,10 +4,15 @@ module Api
       render :ok, json: create_results
     end
 
-    def compare_latest_of_tags
-      # grab the latest of left_tag and right_tag, and return a JSON
-      # representation of the comparison
+    def index
+      # todo rename route
+      compare_latest_of_tags
+    end
 
+    def compare_latest_of_tags
+      comper = Api::ResultsComper.new project, params[:left_tag], params[:right_tag]
+
+      render :ok, json: comper.comparison
     end
 
     private
@@ -32,7 +37,7 @@ module Api
     end
 
     def project
-      @project ||= Project.find params[:project_id]
+      @project ||= current_user.projects.find_by id: params[:project_id]
     end
 
     def results
