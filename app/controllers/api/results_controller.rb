@@ -4,6 +4,12 @@ module Api
       render :ok, json: create_results
     end
 
+    def compare_latest_of_tags
+      # grab the latest of left_tag and right_tag, and return a JSON
+      # representation of the comparison
+
+    end
+
     private
 
     def create_results
