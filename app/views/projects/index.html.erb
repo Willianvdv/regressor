@@ -5,7 +5,7 @@
 
   <ul>
     <% @projects.each do |project| %>
-      <li><%= link_to project.id, project %></li>
+      <li><%= link_to "#{project.name} (#{project.id})", project %></li>
     <% end %>
   </ul>
 </div>
