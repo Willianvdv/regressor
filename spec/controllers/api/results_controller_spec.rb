@@ -60,7 +60,7 @@ RSpec.describe Api::ResultsController, :type => :controller do
     let(:shared_example_name) { 'shared example name' }
 
     subject do
-      get :index, project_id: project.id, left_tag: tag_left, right_tag: tag_right
+      get :compare_latest_of_tags, project_id: project.id, left_tag: tag_left, right_tag: tag_right
     end
 
     let(:response_json) do

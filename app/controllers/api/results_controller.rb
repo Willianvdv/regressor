@@ -4,11 +4,6 @@ module Api
       render :ok, json: create_results
     end
 
-    def index
-      # todo rename route
-      compare_latest_of_tags
-    end
-
     def compare_latest_of_tags
       comper = Api::ResultsComper.new project, params[:left_tag], params[:right_tag]
 
