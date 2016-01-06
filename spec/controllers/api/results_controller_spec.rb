@@ -36,8 +36,6 @@ RSpec.describe Api::ResultsController, :type => :controller do
     include_examples 'authenticated using api token'
 
     context 'authorized', :auth_using_api_token do
-      let(:project) { create :project, user: user_with_api_token }
-
       it 'creates the results' do
         expect { subject }.to change { project.results.count }.by(2)
         result = project.results.first
@@ -74,8 +72,6 @@ RSpec.describe Api::ResultsController, :type => :controller do
     include_examples 'authenticated using api token'
 
     context 'authorized', :auth_using_api_token do
-      let(:project) { create :project, user: user_with_api_token }
-
       describe 'format: json' do
         it 'compares left with right' do
           result_left = create :result,

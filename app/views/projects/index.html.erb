@@ -5,7 +5,11 @@
 
   <ul>
     <% @projects.each do |project| %>
-      <li><%= link_to "#{project.name} (#{project.id})", project %></li>
+      <% if project.created_by? current_user %>
+        <li><%= link_to "#{project.name} (#{project.id})", project %> (owner)</li>
+      <% else %>
+        <li><%= link_to "#{project.name} (#{project.id})", project %> (member)</li>
+      <% end %>
     <% end %>
   </ul>
 </div>
