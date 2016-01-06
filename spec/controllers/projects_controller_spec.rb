@@ -32,6 +32,15 @@ describe ProjectsController, type: :controller do
       is_expected.to have_http_status :ok
     end
 
+    context 'when somebody else is the owner' do
+      it 'renders the project show page' do
+        somebody_elses_project = create :project
+        somebody_elses_project.users << project.creator
+
+        expect(get :show, id: somebody_elses_project.id).to have_http_status :ok
+      end
+    end
+
     include_examples 'authentication'
   end
 end
