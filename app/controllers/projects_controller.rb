@@ -7,7 +7,7 @@ class ProjectsController < BackendController
     @project = new_project_for(current_user)
 
     if @project.update(project_params)
-      redirect_to @project, success: 'Project created'
+      redirect_to @project, notice: 'Project created'
     else
       render :new
     end
@@ -20,6 +20,18 @@ class ProjectsController < BackendController
   def show
     @project = ProjectPresenter.new(current_user.projects.find params['id'])
     @example_names = @project.example_names
+  end
+
+  def add_user
+    project = current_user.projects.find params['id']
+    new_user = User.find_by email: params["new_user_email"]
+
+    if new_user.present?
+      project.users << new_user
+      redirect_to project, notice: "#{new_user.email} added to project"
+    else
+      redirect_to project, alert: "User #{params["new_user_email"]} not found"
+    end
   end
 
   private

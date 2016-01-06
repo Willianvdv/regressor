@@ -13,6 +13,12 @@
       <li><%= user.email %> (<%= @project.membership_name user %>)</li>
     <% end %>
   </ul>
+
+  <h2>Add new user</h2>
+  <%= form_tag(controller: 'projects', action: 'add_user', method: 'post') do %>
+    <%= text_field_tag(:new_user_email) %>
+    <%= submit_tag("Add") %>
+  <% end %>
 </div>
 
 <div>
