@@ -21,3 +21,11 @@
 .green {
   color: green
 }
+
+.filter-dropdown {
+  display: none;
+}
+
+.filter-dropdown a {
+  display: block;
+}
