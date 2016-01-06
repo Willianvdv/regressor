@@ -7,8 +7,8 @@ class ResultsController < BackendController
   end
 
   def compare_view
-    result_left = Result.find(params[:result_id_left])
-    result_right = Result.find(params[:result_id_right])
+    result_left = current_user.results.find(params[:result_id_left])
+    result_right = current_user.results.find(params[:result_id_right])
     @results_comper = ResultsComper.new(result_left, result_right)
   end
 end
