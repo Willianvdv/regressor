@@ -1,9 +1,5 @@
 [![Circle CI](https://circleci.com/gh/Willianvdv/regressor.svg?style=svg)](https://circleci.com/gh/Willianvdv/regressor)
 
-!!!
-You need the `raas` branch from [rspec_regressor](https://github.com/regressionbv/rspec_regression)
-!!!
-
 # How it works (by example)
 
 * There are two CI jobs: develop and master
