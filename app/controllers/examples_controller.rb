@@ -7,6 +7,7 @@ class ExamplesController < ApplicationController
 
     @last_result_for_this_example = last_result_for_this_example
     @results_for_this_example = results_for_this_example
+    @possible_tags = possible_tags
   end
 
   private
@@ -29,16 +30,27 @@ class ExamplesController < ApplicationController
     params['project_id']
   end
 
+  def tag
+    params['tag']
+  end
+
   delegate :results, to: :project
 
   def results_for_this_example
     @results_for_this_example ||= results
-      .where(example_name: example_name)
-      .order(created_at: :desc)
+    .optionally_with_tag(tag)
+    .where(example_name: example_name)
+    .order(created_at: :desc)
   end
 
   def project
     current_user.projects.find project_id
   end
-end
 
+  def possible_tags
+    results
+    .where(example_name: example_name)
+    .pluck(:tag)
+    .uniq
+  end
+end

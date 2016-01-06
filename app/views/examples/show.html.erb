@@ -8,14 +8,25 @@
   </dl>
 <div>
 
+<div>
+  <button type="button" class="filter-button">Filter on tag</button>
+  <div class="filter-dropdown">
+    <%= link_to('(None)', params.merge(tag: '')) %>
+    <br/>
+    <% @possible_tags.each do |tag| %>
+      <%= link_to(tag, params.merge(tag: tag)) %>
+    <% end %>
+  </div>
+</div>
+
 
 <div>
   <table>
-
     <% @results_viewer.each_with_maybe_previous do |previous_result, result, query_change| %>
       <tr>
         <td><%= result.created_at %></td>
         <td><%= result.queries_count %></td>
+        <td><%= result.tag %></td>
 
         <% if previous_result.present? %>
           <% if query_change < 0 %>
