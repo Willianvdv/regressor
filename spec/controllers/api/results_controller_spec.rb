@@ -56,15 +56,15 @@ RSpec.describe Api::ResultsController, :type => :controller do
   end
 
   describe '.compare_latest_of_tags' do
-    let(:tag_left) { '123-left' }
-    let(:tag_right) { 'master-right' }
+    let(:left_tag) { '123-left' }
+    let(:right_tag) { 'master-right' }
     let(:project) { create :project }
     let(:shared_example_location) { 'spec/shared/example/location.rb' }
     let(:shared_example_name) { 'shared example name' }
     let(:format) { :json }
 
     subject do
-      get :compare_latest_of_tags, format: format, project_id: project.id, left_tag: tag_left, right_tag: tag_right
+      get :compare_latest_of_tags, format: format, project_id: project.id, left_tag: left_tag, right_tag: right_tag
     end
 
     let(:response_json) do
@@ -79,13 +79,13 @@ RSpec.describe Api::ResultsController, :type => :controller do
       describe 'format: json' do
         it 'compares left with right' do
           result_left = create :result,
-            tag: tag_left,
+            tag: left_tag,
             example_name: shared_example_name,
             example_location: shared_example_location,
             project: project
 
           result_right = create :result,
-            tag: tag_right,
+            tag: right_tag,
             example_name: shared_example_name,
             example_location: shared_example_location,
             project: project
@@ -110,12 +110,12 @@ RSpec.describe Api::ResultsController, :type => :controller do
 
         it 'compares left with right' do
           result_left = create :result,
-            tag: tag_left,
+            tag: left_tag,
             example_name: shared_example_name,
             project: project
 
           result_right = create :result,
-            tag: tag_right,
+            tag: right_tag,
             example_name: shared_example_name,
             project: project
 
