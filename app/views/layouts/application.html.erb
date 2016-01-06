@@ -8,9 +8,6 @@
   </head>
 
   <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-
     <% if current_user.blank? %>
       <%= link_to 'Sign in', user_omniauth_authorize_path(:github) %>
     <% end %>
@@ -21,6 +18,8 @@
       <%= link_to "My API token", token_show_path %>
     <% end %>
 
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
 
     <%= yield %>
 

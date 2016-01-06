@@ -34,4 +34,30 @@ describe ProjectsController, type: :controller do
 
     include_examples 'authentication'
   end
+
+  describe '.add_user' do
+
+    it 'adds the user to the project' do
+      new_user = create :user
+      expect(project.reload.users).to match_array [project.creator]
+
+      post :add_user,
+        id: project.id,
+        new_user_email: new_user.email
+
+      expect(project.reload.users).to match_array [project.creator, new_user]
+    end
+
+    it 'does nothing if the user is already a member' do
+      expect(project.reload.users).to match_array [project.creator]
+
+      expect do
+        post :add_user,
+          id: project.id,
+          new_user_email: project.creator.email
+      end.to raise_error
+
+      expect(project.reload.users).to match_array [project.creator]
+    end
+  end
 end

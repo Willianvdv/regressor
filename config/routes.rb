@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   resources :projects do
     resources :examples
   end
+  post '/projects/:id/add_user', to: 'projects#add_user'
 
   resources :results, only: :index
   get '/results/compare', to: 'results#compare_view', as: 'result_compare'
