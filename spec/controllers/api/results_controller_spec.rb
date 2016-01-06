@@ -96,11 +96,15 @@ RSpec.describe Api::ResultsController, :type => :controller do
           create :query, result: result_left, statement: 'new query'
           create :query, result: result_right, statement: 'removed query'
 
+          web_interface_link = ":///results/compare?result_id_left="\
+            "#{result_left.id}&result_id_right=#{result_right.id}"
+
           expect(response_json).to eq 'results' => [{
             'example_name' => 'shared example name',
             'example_location' => 'spec/shared/example/location.rb',
             'queries_that_got_added' => ['new query'],
-            'queries_that_got_removed' => ['removed query']
+            'queries_that_got_removed' => ['removed query'],
+            'web_interface_link' => web_interface_link,
           }]
         end
       end
