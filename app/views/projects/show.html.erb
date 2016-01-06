@@ -7,6 +7,15 @@
   </dl>
 </div>
 <div>
+  <h2>Users</h2>
+  <ul>
+    <% @project.users.each do |user| %>
+      <li><%= user.email %> (<%= @project.membership_name user %>)</li>
+    <% end %>
+  </ul>
+</div>
+
+<div>
   <h2>Examples</h2>
   <ul>
     <% @example_names.each do |example_name| %>

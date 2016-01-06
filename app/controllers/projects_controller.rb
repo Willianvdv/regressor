@@ -14,11 +14,11 @@ class ProjectsController < BackendController
   end
 
   def index
-    @projects = current_user.projects
+    @projects = current_user.projects.map { |project| ProjectPresenter.new project }
   end
 
   def show
-    @project = current_user.projects.find params['id']
+    @project = ProjectPresenter.new(current_user.projects.find params['id'])
     @example_names = @project.example_names
   end
 
