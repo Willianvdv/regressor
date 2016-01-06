@@ -21,7 +21,7 @@ module Api
 
         next if queries_that_got_added.empty? && queries_that_got_removed.empty?
 
-        format_comparison(left_result, queries_that_got_added, queries_that_got_removed)
+        format_comparison(left_result, right_result, queries_that_got_added, queries_that_got_removed)
       end.compact
     end
 
@@ -39,6 +39,7 @@ module Api
       header = "* #{result['example_name']} (#{result['example_location']})"
 
       markdown = <<-ENDMARKDOWN
+        * [View in web interface](#{result['web_interface_link']})
         * Queries that got added:
           #{array_to_markdown_list(result['queries_that_got_added'])}
         * Queries that got removed:
@@ -78,13 +79,20 @@ module Api
       end
     end
 
-    def format_comparison(left_result, queries_that_got_added, queries_that_got_removed)
+    def format_comparison(left_result, right_result, queries_that_got_added, queries_that_got_removed)
       {
         "example_name" => left_result.example_name,
         "example_location" => left_result.example_location,
         "queries_that_got_added" => queries_that_got_added,
         "queries_that_got_removed" => queries_that_got_removed,
+        "web_interface_link" => result_comparison_link(left_result, right_result),
       }
+    end
+
+    def result_comparison_link(left, right)
+      url_options = ActionController::Base.default_url_options
+      host = "#{url_options[:protocol]}://#{url_options[:host]}"
+      "#{host}/results/compare?result_id_left=#{left.id}&result_id_right=#{right.id}"
     end
   end
 end
