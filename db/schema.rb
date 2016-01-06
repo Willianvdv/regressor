@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151209152117) do
+ActiveRecord::Schema.define(version: 20160106133520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,15 +31,23 @@ ActiveRecord::Schema.define(version: 20151209152117) do
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
   create_table "projects", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.uuid     "user_id"
+    t.uuid     "creator_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "name"
     t.string   "slug"
   end
 
+  add_index "projects", ["creator_id"], name: "index_projects_on_creator_id", using: :btree
   add_index "projects", ["slug"], name: "index_projects_on_slug", unique: true, using: :btree
-  add_index "projects", ["user_id"], name: "index_projects_on_user_id", using: :btree
+
+  create_table "projects_users", id: false, force: :cascade do |t|
+    t.uuid "user_id"
+    t.uuid "project_id"
+  end
+
+  add_index "projects_users", ["project_id", "user_id"], name: "index_projects_users_on_project_id_and_user_id", using: :btree
+  add_index "projects_users", ["user_id", "project_id"], name: "index_projects_users_on_user_id_and_project_id", using: :btree
 
   create_table "queries", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.uuid     "result_id"
@@ -85,7 +93,7 @@ ActiveRecord::Schema.define(version: 20151209152117) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["uid"], name: "index_users_on_uid", using: :btree
 
-  add_foreign_key "projects", "users"
+  add_foreign_key "projects", "users", column: "creator_id"
   add_foreign_key "queries", "results"
   add_foreign_key "results", "projects"
 end

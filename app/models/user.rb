@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
 
   devise :omniauthable, omniauth_providers: [:github]
 
-  has_many :projects
+  has_and_belongs_to_many :projects
   has_many :results, through: :projects
 
   def self.from_omniauth(auth)
