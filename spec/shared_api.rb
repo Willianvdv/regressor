@@ -1,5 +1,7 @@
 RSpec.shared_context 'authorized with api_token', :auth_using_api_token do
   let(:user_with_api_token) { create :user }
+  let(:project) { create :project, user: user_with_api_token }
+
   before do
     token = ActionController::HttpAuthentication::Token
       .encode_credentials(Base64.strict_encode64 user_with_api_token.api_token)

@@ -36,6 +36,8 @@ RSpec.describe Api::ResultsController, :type => :controller do
     include_examples 'authenticated using api token'
 
     context 'authorized', :auth_using_api_token do
+      let(:project) { create :project, user: user_with_api_token }
+
       it 'creates the results' do
         expect { subject }.to change { project.results.count }.by(2)
         result = project.results.first
@@ -49,6 +51,82 @@ RSpec.describe Api::ResultsController, :type => :controller do
 
       it 'without a project' do
         expect { post(:create, result_params) }.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+  end
+
+  describe '.compare_latest_of_tags' do
+    let(:left_tag) { '123-left' }
+    let(:right_tag) { 'master-right' }
+    let(:project) { create :project }
+    let(:shared_example_location) { 'spec/shared/example/location.rb' }
+    let(:shared_example_name) { 'shared example name' }
+    let(:format) { :json }
+
+    subject do
+      get :compare_latest_of_tags, format: format, project_id: project.id, left_tag: left_tag, right_tag: right_tag
+    end
+
+    let(:response_json) do
+      JSON.parse subject.body
+    end
+
+    include_examples 'authenticated using api token'
+
+    context 'authorized', :auth_using_api_token do
+      let(:project) { create :project, user: user_with_api_token }
+
+      describe 'format: json' do
+        it 'compares left with right' do
+          result_left = create :result,
+            tag: left_tag,
+            example_name: shared_example_name,
+            example_location: shared_example_location,
+            project: project
+
+          result_right = create :result,
+            tag: right_tag,
+            example_name: shared_example_name,
+            example_location: shared_example_location,
+            project: project
+
+          create :query, result: result_left, statement: 'query in both'
+          create :query, result: result_right, statement: 'query in both'
+
+          create :query, result: result_left, statement: 'new query'
+          create :query, result: result_right, statement: 'removed query'
+
+          expect(response_json).to eq 'results' => [{
+            'example_name' => 'shared example name',
+            'example_location' => 'spec/shared/example/location.rb',
+            'queries_that_got_added' => ['new query'],
+            'queries_that_got_removed' => ['removed query']
+          }]
+        end
+      end
+
+      describe 'format text' do
+        let(:format) { :text }
+
+        it 'compares left with right' do
+          result_left = create :result,
+            tag: left_tag,
+            example_name: shared_example_name,
+            project: project
+
+          result_right = create :result,
+            tag: right_tag,
+            example_name: shared_example_name,
+            project: project
+
+          create :query, result: result_left, statement: 'query in both'
+          create :query, result: result_right, statement: 'query in both'
+
+          create :query, result: result_left, statement: 'new query'
+          create :query, result: result_right, statement: 'removed query'
+
+          expect(subject.status).to eq 200
+        end
       end
     end
   end
