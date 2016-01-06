@@ -9,7 +9,7 @@ RSpec.describe ResultsController, :type => :controller do
       left = create :result, project: project
       right = create :result, project: project
 
-      sign_in project.creator
+      sign_in project.user
       get :compare_view, result_id_left: left.id, result_id_right: right.id
 
       expect(response).to have_http_status :ok
@@ -21,7 +21,7 @@ RSpec.describe ResultsController, :type => :controller do
       project = create :project
       left = create :result, project: project
 
-      sign_in project.creator
+      sign_in project.user
       get :index, id: left.id
 
       expect(response).to have_http_status :ok

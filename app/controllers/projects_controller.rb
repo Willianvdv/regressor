@@ -1,12 +1,12 @@
 class ProjectsController < BackendController
   def new
-    @project = new_project_for current_user
+    @project = current_user.projects.build
   end
 
   def create
-    @project = new_project_for(current_user)
+    @project = current_user.projects.build project_params
 
-    if @project.update(project_params)
+    if @project.save
       redirect_to @project, success: 'Project created'
     else
       render :new
@@ -26,9 +26,5 @@ class ProjectsController < BackendController
 
   def project_params
     params.require(:project).permit(:name)
-  end
-
-  def new_project_for(user)
-    Project.new(creator: user, users: [user])
   end
 end

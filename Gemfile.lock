@@ -30,7 +30,8 @@ GIT
 
 GIT
   remote: git://github.com/willianvdv/rspec_regression.git
-  revision: 550a51bbd49f38fb574f23e9ba87f2dead45d612
+  revision: 715165165faf8fe41ce0f7794592525483becc28
+  branch: raas
   specs:
     rspec_regression (0.0.2)
       awesome_print

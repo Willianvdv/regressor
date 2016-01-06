@@ -3,7 +3,7 @@ require 'rails_helper'
 describe ProjectsController, type: :controller do
   let(:project) { create :project }
 
-  before { sign_in :user, project.creator }
+  before { sign_in :user, project.user }
 
   shared_examples 'authentication' do
     context 'not singed in' do
